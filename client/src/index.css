@@ -1,0 +1,195 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #06b6d4;
+  /* Cyan 500 */
+  --color-secondary: #8b5cf6;
+  /* Violet 500 */
+  --color-dark: #030712;
+  /* Gray 950 */
+  --color-dark-lighter: #111827;
+  /* Gray 900 */
+  --color-accent: #f472b6;
+  /* Pink 400 */
+
+  --font-family-sans: 'Outfit', 'Inter', sans-serif;
+
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-pulse-glow: pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+
+  @keyframes float {
+
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+
+  @keyframes pulse-glow {
+
+    0%,
+    100% {
+      opacity: 1;
+      box-shadow: 0 0 20px rgba(6, 182, 212, 0.5);
+    }
+
+    50% {
+      opacity: 0.5;
+      box-shadow: 0 0 10px rgba(6, 182, 212, 0.2);
+    }
+  }
+}
+
+@layer base {
+  body {
+    background-color: var(--color-dark);
+    color: #f3f4f6;
+    /* Gray 100 */
+    font-family: var(--font-family-sans);
+    overflow-x: hidden;
+  }
+
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--color-dark);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #1f2937;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #374151;
+  }
+}
+
+@layer components {
+
+  /* Premium Glassmorphism */
+  .glass-premium {
+    background: rgba(17, 24, 39, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  }
+
+  .glass-card {
+    background: rgba(17, 24, 39, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    @apply rounded-2xl p-6 transition-all duration-300;
+  }
+
+  .glass-card:hover {
+    border-color: rgba(6, 182, 212, 0.3);
+    box-shadow: 0 0 20px rgba(6, 182, 212, 0.1);
+    transform: translateY(-2px);
+  }
+
+  .glass-input {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    color: white;
+    outline: none;
+    transition: all 0.3s ease;
+  }
+
+  .glass-input:focus {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.2);
+  }
+
+  .glass-btn {
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    color: white;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .glass-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
+    filter: brightness(1.1);
+  }
+
+  .glass-btn:active {
+    transform: translateY(1px);
+  }
+
+  .text-gradient {
+    background: linear-gradient(to right, #22d3ee, #a78bfa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .neon-border {
+    position: relative;
+  }
+
+  .neon-border::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    background: linear-gradient(45deg, var(--color-primary), var(--color-secondary));
+    z-index: -1;
+    border-radius: inherit;
+    opacity: 0.5;
+    filter: blur(10px);
+    transition: opacity 0.3s;
+  }
+
+  .neon-border:hover::after {
+    opacity: 1;
+  }
+
+  /* Background Utilities */
+  .bg-grid-white {
+    background-size: 50px 50px;
+    background-image: linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  }
+
+  .bg-grid-primary {
+    background-size: 50px 50px;
+    background-image: linear-gradient(to right, rgba(6, 182, 212, 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(6, 182, 212, 0.05) 1px, transparent 1px);
+  }
+
+  /* Animations */
+  @keyframes fade-up {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-up {
+    animation: fade-up 0.8s ease-out forwards;
+  }
+}
