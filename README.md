@@ -1,33 +1,57 @@
-# Freelance Bidding Platform
+# 💼 AI-Powered Freelance Bidding Platform
 
-A full-stack freelance bidding platform where users can post projects, bid on jobs, and manage their freelance work efficiently. Built with **JavaScript**, **Node.js**, **Express**, and a frontend framework (React assumed).
-
----
-
-## Features
-
-- **User Authentication** – Secure login and signup system
-- **Bidding System** – Users can bid on posted projects
-- **Dashboard** – Manage projects, bids, and notifications
-- **Messaging** – Communicate with clients/freelancers
-- **Notifications** – Keep track of important updates
-- **Reviews & Contracts** – Rate users and manage contracts
+An advanced full-stack freelancing platform designed to connect clients and freelancers with **AI-driven project insights**, **team-based bidding**, and a modern user experience.
 
 ---
 
-## Technologies Used
+## 🚀 Key Features
 
-- **Backend:** Node.js, Express
-- **Frontend:** React (or specify your frontend framework)
-- **Database:** MongoDB / MySQL (replace with your DB)
-- **Languages:** JavaScript, HTML, CSS
-- **Others:** WebSockets (for real-time messaging)
+### 🧠 AI Project Architect
+- Integrated **Gemini 1.5 Flash (Google AI)**  
+- Automatically generates **technical blueprints** for project posts  
+- Helps freelancers understand requirements instantly  
 
 ---
 
-## Installation
+### 👥 Squad & PoC Bidding
+- Freelancers can **bid as a team (Squad System)**  
+- Submit **interactive Proof of Concept (PoC)** snippets  
+- Clients can preview solutions before hiring  
 
-1. Clone the repository:
+---
+
+### 🎨 Premium User Experience
+- Glassmorphic **Login/Register UI**  
+- Responsive **split-screen layout**  
+- Clean and modern dashboard design  
+
+---
+
+### ⚙️ Core Functionalities
+- 🔐 Secure Authentication & Authorization  
+- 📊 Project & Bid Management System  
+- 💬 Real-time Messaging (WebSockets)  
+- 🔔 Smart Notifications  
+- ⭐ Reviews & Contract Handling  
+
+---
+
+## 🛠 Tech Stack
+
+- **Frontend:** React  
+- **Backend:** Node.js, Express  
+- **Database:** MongoDB  
+- **Real-time:** WebSockets  
+- **AI Integration:** Gemini API  
+- **Languages:** JavaScript, HTML, CSS  
+
+---
+
+## 📦 Installation
 
 ```bash
+git clone https://github.com/palakvishwakarma44/FreeBiding-Freelancing-Website
+cd FreeBiding-Freelancing-Website
+npm install
+npm start
 git clone https://github.com/palakvishwakarma44/freelance-bidding-platform.git
