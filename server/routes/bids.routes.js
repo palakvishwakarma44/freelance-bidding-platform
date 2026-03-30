@@ -23,14 +23,16 @@ router.post('/:jobId', auth, async (req, res) => {
         const existingBid = await Bid.findOne({ job: req.params.jobId, freelancer: req.user.id });
         if (existingBid) return res.status(400).json({ message: 'You have already placed a bid on this job' });
 
-        const { amount, proposal, deliveryTime } = req.body;
+        const { amount, proposal, deliveryTime, squad, poc } = req.body;
 
         const newBid = new Bid({
             job: req.params.jobId,
             freelancer: req.user.id,
             amount,
             proposal,
-            deliveryTime
+            deliveryTime,
+            squad,
+            poc
         });
 
         const bid = await newBid.save();
@@ -70,7 +72,9 @@ router.get('/job/:jobId', auth, async (req, res) => {
             return res.status(403).json({ message: 'Not authorized to view bids for this job' });
         }
 
-        const bids = await Bid.find({ job: req.params.jobId }).populate('freelancer', 'username profile');
+        const bids = await Bid.find({ job: req.params.jobId })
+            .populate('freelancer', 'username profile')
+            .populate('squad.user', 'username profile');
         res.json(bids);
     } catch (err) {
         console.error(err.message);

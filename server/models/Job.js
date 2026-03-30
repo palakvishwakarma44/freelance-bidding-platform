@@ -41,6 +41,14 @@ const jobSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now
+    },
+    roadmap: {
+        type: mongoose.Schema.Types.Mixed,
+        default: null
+    },
+    squadOnly: {
+        type: Boolean,
+        default: false
     }
 });
 

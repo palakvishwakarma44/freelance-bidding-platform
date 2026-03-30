@@ -14,7 +14,7 @@ router.post('/', auth, async (req, res) => {
             return res.status(403).json({ message: 'Only clients can post jobs' });
         }
 
-        const { title, description, category, budget, deadline } = req.body;
+        const { title, description, category, budget, deadline, roadmap, squadOnly } = req.body;
 
         const newJob = new Job({
             client: req.user.id,
@@ -22,7 +22,9 @@ router.post('/', auth, async (req, res) => {
             description,
             category,
             budget,
-            deadline
+            deadline,
+            roadmap,
+            squadOnly
         });
 
         const job = await newJob.save();

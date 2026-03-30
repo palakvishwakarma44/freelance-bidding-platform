@@ -3,17 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { GoogleGenerativeAI } from '@google/generative-ai';
-import { Sparkles, X } from 'lucide-react';
+import { Sparkles, X, Users, ArrowRight } from 'lucide-react';
 import { API_URL } from '../config';
+import ProjectArchitect from '../components/ProjectArchitect';
 
 const CreateJob = () => {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
-        title: '',
-        description: '',
-        category: 'Development',
-        budget: '',
-        deadline: ''
+        deadline: '',
+        roadmap: null,
+        squadOnly: false
     });
     const [generating, setGenerating] = useState(false);
     const [showKeyInput, setShowKeyInput] = useState(false);
@@ -36,26 +35,51 @@ const CreateJob = () => {
         setGenerating(true);
         try {
             const genAI = new GoogleGenerativeAI(apiKey);
-            const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+            const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-            const prompt = `Write a professional and detailed job description for a ${formData.category} job titled "${formData.title}". 
-            Include sections for:
-            - Job Overview
-            - Key Responsibilities
-            - Required Skills & Qualifications
-            - Why Join Us
-            Keep it engaging and professional. Format with clear headings.`;
+            // 1. Generate Description
+            const descPrompt = `Write a professional job description for a ${formData.category} job titled "${formData.title}". 
+            Include: Overview, Responsibilities, Skills. Format with clear headings.`;
+            
+            // 2. Generate Roadmap JSON
+            const roadmapPrompt = `Generate a structured technical roadmap for a ${formData.category} project titled "${formData.title}".
+            Return ONLY a valid JSON object with:
+            {
+              "milestones": [{ "title": "String", "description": "String", "duration": "String" }],
+              "techStack": ["String"],
+              "strategy": "String",
+              "edgeCases": ["String"]
+            }
+            Ensure milestones are logical for the budget and scope.`;
 
-            const result = await model.generateContent(prompt);
-            const response = await result.response;
-            const text = response.text();
+            const [descResult, roadmapResult] = await Promise.all([
+                model.generateContent(descPrompt),
+                model.generateContent(roadmapPrompt)
+            ]);
 
-            setFormData(prev => ({ ...prev, description: text }));
-            toast.success('Description generated with AI!');
+            const descText = descResult.response.text();
+            let roadmapData = null;
+            
+            try {
+                const roadmapText = roadmapResult.response.text();
+                // Extract JSON if AI wrapped it in markdown
+                const jsonMatch = roadmapText.match(/\{[\s\S]*\}/);
+                roadmapData = JSON.parse(jsonMatch ? jsonMatch[0] : roadmapText);
+            } catch (e) {
+                console.error("Roadmap parsing failed", e);
+            }
+
+            setFormData(prev => ({ 
+                ...prev, 
+                description: descText,
+                roadmap: roadmapData 
+            }));
+            
+            toast.success('AI Architect has designed your project!');
         } catch (error) {
             console.error('Gemini Error:', error);
             toast.error('Failed to generate. Check your API Key.');
-            setShowKeyInput(true); // Show input if key might be wrong
+            setShowKeyInput(true);
         } finally {
             setGenerating(false);
         }
@@ -162,6 +186,25 @@ const CreateJob = () => {
                             required
                         />
                     </div>
+
+                    <div className="flex items-center space-x-3 p-4 glass-card border-primary/20">
+                        <input
+                            type="checkbox"
+                            id="squadOnly"
+                            checked={formData.squadOnly}
+                            onChange={(e) => setFormData({ ...formData, squadOnly: e.target.checked })}
+                            className="w-5 h-5 accent-primary"
+                        />
+                        <label htmlFor="squadOnly" className="text-sm font-medium text-gray-300">
+                            Squad Only Project <span className="text-xs text-primary/60 ml-2">(Requires a collaborative team bid)</span>
+                        </label>
+                    </div>
+
+                    {formData.roadmap && (
+                        <div className="mt-8 pt-8 border-t border-white/5">
+                            <ProjectArchitect roadmap={formData.roadmap} />
+                        </div>
+                    )}
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>

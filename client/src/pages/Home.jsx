@@ -232,7 +232,7 @@ const Home = () => {
                         >
                             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-primary text-sm font-medium mb-8 backdrop-blur-sm animate-fade-up hover:bg-white/10 transition-colors cursor-default">
                                 <Sparkles size={14} />
-                                <span>The Future of Work is Here</span>
+                                <span>The Intelligent Workspace (Freelance 3.0)</span>
                             </div>
 
                             <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold mb-8 leading-[1.1] tracking-tight">
@@ -240,9 +240,9 @@ const Home = () => {
                                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-purple-400 to-secondary relative">
                                     <TypeAnimation
                                         sequence={[
-                                            'Talent', 2000,
-                                            'Projects', 2000,
-                                            'Success', 2000,
+                                            'Architects', 2000,
+                                            'Squads', 2000,
+                                            'Innovation', 2000,
                                         ]}
                                         wrapper="span"
                                         speed={50}
@@ -252,8 +252,8 @@ const Home = () => {
                                 </span>
                             </h1>
 
-                            <p className="text-xl text-gray-400 mb-10 max-w-xl leading-relaxed">
-                                Experience a freelance marketplace built for the modern era. Secure, fast, and beautifully designed for professionals like you.
+                             <p className="text-xl text-gray-400 mb-10 max-w-xl leading-relaxed">
+                                Experience a workspace where AI builds your roadmaps, squads amplify your power, and every milestone is verified by code.
                             </p>
 
                             <div className="flex flex-col sm:flex-row gap-5">
@@ -300,21 +300,21 @@ const Home = () => {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         <FeatureCard
-                            icon={Shield}
-                            title="Secure Escrow"
-                            description="Funds are held safely until you approve the work. No scams, no worries."
+                            icon={Sparkles}
+                            title="AI Project Architect"
+                            description="Automatically generate technical roadmaps, milestones, and success strategies for every job posting."
                             delay={0.1}
                         />
                         <FeatureCard
-                            icon={Zap}
-                            title="Instant Match"
-                            description="Our AI powered algorithms match you with the perfect talent in seconds."
+                            icon={Users}
+                            title="Squad Protocol"
+                            description="Form instant collaborative teams to bid on complex projects that require multi-disciplinary talent."
                             delay={0.2}
                         />
                         <FeatureCard
-                            icon={Globe}
-                            title="Global Payments"
-                            description="Pay and get paid in over 150 currencies with minimal transaction fees."
+                            icon={Zap}
+                            title="PoC Bidding"
+                            description="Freelancers can attach interactive 'Proof of Concept' snippets directly to their bids for instant validation."
                             delay={0.3}
                         />
                         <FeatureCard

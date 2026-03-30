@@ -4,6 +4,9 @@ import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { API_URL } from '../config';
+import ProjectArchitect from '../components/ProjectArchitect';
+import PoCPreview from '../components/PoCPreview';
+import { Sparkles, Users, Code, Plus, Trash2, Zap, Shield, ArrowRight } from 'lucide-react';
 
 const JobDetails = () => {
     const { id } = useParams();
@@ -14,7 +17,9 @@ const JobDetails = () => {
     const [bidForm, setBidForm] = useState({
         amount: '',
         deliveryTime: '',
-        proposal: ''
+        proposal: '',
+        squad: [],
+        poc: ''
     });
 
     useEffect(() => {
@@ -82,12 +87,31 @@ const JobDetails = () => {
             });
             if (response.ok) {
                 toast.success('Bid accepted! Contract started.');
-                fetchJob(); // Refresh job status
-                fetchBids(); // Refresh bids
+                fetchJob();
+                fetchBids();
             }
         } catch (error) {
             console.error('Error accepting bid:', error);
         }
+    };
+
+    const addSquadMember = () => {
+        setBidForm({
+            ...bidForm,
+            squad: [...bidForm.squad, { user: '', role: '' }]
+        });
+    };
+
+    const removeSquadMember = (index) => {
+        const newSquad = [...bidForm.squad];
+        newSquad.splice(index, 1);
+        setBidForm({ ...bidForm, squad: newSquad });
+    };
+
+    const handleSquadChange = (index, field, value) => {
+        const newSquad = [...bidForm.squad];
+        newSquad[index][field] = value;
+        setBidForm({ ...bidForm, squad: newSquad });
     };
 
     if (!job) return <div className="pt-24"><LoadingSpinner /></div>;
@@ -137,7 +161,13 @@ const JobDetails = () => {
 
                     <div className="mb-8">
                         <h3 className="text-xl font-bold mb-4">Description</h3>
-                        <p className="text-gray-300 whitespace-pre-wrap">{job.description}</p>
+                        <p className="text-gray-300 whitespace-pre-wrap mb-10">{job.description}</p>
+                        
+                        {job.roadmap && (
+                            <div className="mt-10 border-t border-white/5 pt-10">
+                                <ProjectArchitect roadmap={job.roadmap} />
+                            </div>
+                        )}
                     </div>
                 </motion.div>
 
@@ -179,8 +209,65 @@ const JobDetails = () => {
                                     value={bidForm.proposal}
                                     onChange={(e) => setBidForm({ ...bidForm, proposal: e.target.value })}
                                     className="glass-input w-full text-white h-32"
-                                    placeholder="Why are you the best fit for this job?"
+                                    placeholder="Briefly explain your approach..."
                                     required
+                                />
+                            </div>
+
+                            {/* Squad Bidding Section */}
+                            <div className="pt-4 border-t border-white/5">
+                                <div className="flex justify-between items-center mb-4">
+                                    <h4 className="font-bold flex items-center gap-2">
+                                        <Users size={18} className="text-primary" /> Squad Members (Optional)
+                                    </h4>
+                                    <button 
+                                        type="button" 
+                                        onClick={addSquadMember}
+                                        className="text-xs text-primary hover:text-white flex items-center gap-1"
+                                    >
+                                        <Plus size={14} /> Add Member
+                                    </button>
+                                </div>
+                                <div className="space-y-3">
+                                    {bidForm.squad.map((member, index) => (
+                                        <div key={index} className="flex gap-3">
+                                            <input
+                                                type="text"
+                                                placeholder="User ID/Username"
+                                                value={member.user}
+                                                onChange={(e) => handleSquadChange(index, 'user', e.target.value)}
+                                                className="glass-input flex-1 text-sm"
+                                            />
+                                            <input
+                                                type="text"
+                                                placeholder="Role (e.g. UI Designer)"
+                                                value={member.role}
+                                                onChange={(e) => handleSquadChange(index, 'role', e.target.value)}
+                                                className="glass-input flex-1 text-sm"
+                                            />
+                                            <button 
+                                                type="button" 
+                                                onClick={() => removeSquadMember(index)}
+                                                className="p-2 text-red-500 hover:bg-red-500/10 rounded-lg"
+                                            >
+                                                <Trash2 size={16} />
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* PoC Section */}
+                            <div className="pt-4 border-t border-white/5">
+                                <label className="block font-bold mb-2 flex items-center gap-2">
+                                    <Code size={18} className="text-secondary" /> Proof of Concept (Optional)
+                                </label>
+                                <p className="text-xs text-gray-500 mb-3">Add a logic snippet or interactive preview to showcase your vision.</p>
+                                <textarea
+                                    value={bidForm.poc}
+                                    onChange={(e) => setBidForm({ ...bidForm, poc: e.target.value })}
+                                    className="glass-input w-full text-white font-mono text-sm h-32"
+                                    placeholder="Paste your logic or UI description here..."
                                 />
                             </div>
                             <button type="submit" className="glass-btn w-full py-3">Submit Proposal</button>
@@ -231,9 +318,40 @@ const JobDetails = () => {
                                     <div className="text-right">
                                         <p className="text-xl font-bold text-primary">${bid.amount}</p>
                                         <p className="text-sm text-gray-400">in {bid.deliveryTime} days</p>
+                                        {bid.squad?.length > 0 && (
+                                            <span className="inline-block mt-1 px-2 py-0.5 rounded bg-purple-500/20 text-purple-400 text-[10px] font-bold uppercase">Squad Bid</span>
+                                        )}
                                     </div>
                                 </div>
+                                
                                 <p className="text-gray-300 mb-4">{bid.proposal}</p>
+                                
+                                {bid.squad?.length > 0 && (
+                                    <div className="mb-4 p-3 bg-white/5 rounded-lg border border-white/5">
+                                        <p className="text-xs font-bold text-gray-400 mb-2 flex items-center gap-1 uppercase tracking-tighter">
+                                            <Users size={12} /> Squad Collaboration
+                                        </p>
+                                        <div className="flex flex-wrap gap-4">
+                                            {bid.squad.map((m, i) => (
+                                                <div key={i} className="flex items-center gap-2">
+                                                    <div className="w-6 h-6 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-[10px] font-bold">
+                                                        {m.user?.username ? m.user.username[0].toUpperCase() : '?'}
+                                                    </div>
+                                                    <div>
+                                                        <p className="text-xs font-bold">{m.user?.username || m.user}</p>
+                                                        <p className="text-[10px] text-gray-500">{m.role}</p>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+
+                                {bid.poc && (
+                                    <div className="mb-4">
+                                        <PoCPreview poc={bid.poc} />
+                                    </div>
+                                )}
                                 {job.status === 'Open' && (
                                     <button
                                         onClick={() => handleAcceptBid(bid._id)}

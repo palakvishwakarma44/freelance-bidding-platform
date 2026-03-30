@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Clock, DollarSign, FileText } from 'lucide-react';
+import { Clock, DollarSign, FileText, Users, Code } from 'lucide-react';
 import LoadingSpinner from '../components/LoadingSpinner';
 import EmptyState from '../components/EmptyState';
+import PoCPreview from '../components/PoCPreview';
 import { API_URL } from '../config';
 
 const MyBids = () => {
@@ -65,13 +66,13 @@ const MyBids = () => {
                 ) : bids.length > 0 ? (
                     <div className="grid gap-6">
                         {bids.map((bid, index) => (
-                            <motion.div
-                                key={bid._id}
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: index * 0.1 }}
-                                className="glass-card p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4"
-                            >
+                            <React.Fragment key={bid._id}>
+                                <motion.div
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: index * 0.1 }}
+                                    className={`glass-card p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 ${bid.poc ? 'rounded-b-none border-b-0' : ''}`}
+                                >
                                 <div>
                                     <h3 className="text-xl font-bold mb-2 text-primary">{bid.job.title}</h3>
                                     <div className="flex flex-wrap gap-4 text-sm text-gray-400">
@@ -86,10 +87,28 @@ const MyBids = () => {
                                         </span>
                                     </div>
                                 </div>
-                                <Link to={`/jobs/${bid.job._id}`} className="glass-btn px-6 py-2 text-sm whitespace-nowrap">
-                                    View Job
-                                </Link>
+                                <div className="flex flex-col gap-2">
+                                    <Link to={`/jobs/${bid.job._id}`} className="glass-btn px-6 py-2 text-sm text-center whitespace-nowrap">
+                                        View Job
+                                    </Link>
+                                    {bid.squad?.length > 0 && (
+                                        <div className="flex items-center justify-center gap-1 text-xs text-purple-400 font-bold bg-purple-500/10 px-2 py-1 rounded">
+                                            <Users size={12} /> Squad Bid
+                                        </div>
+                                    )}
+                                </div>
                             </motion.div>
+                            
+                            {bid.poc && (
+                                <motion.div
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    className="px-6 pb-6 pt-0 -mt-6 bg-white/5 rounded-b-2xl border border-t-0 border-white/10"
+                                >
+                                    <PoCPreview poc={bid.poc} />
+                                </motion.div>
+                            )}
+                        </React.Fragment>
                         ))}
                     </div>
                 ) : (

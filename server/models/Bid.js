@@ -31,6 +31,14 @@ const bidSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now
+    },
+    squad: [{
+        user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+        role: { type: String }
+    }],
+    poc: {
+        type: mongoose.Schema.Types.Mixed,
+        default: null
     }
 });
 
