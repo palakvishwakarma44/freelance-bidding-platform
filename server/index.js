@@ -9,6 +9,7 @@ dotenv.config();
 
 const allowedOrigins = [
   process.env.CLIENT_URL,
+  "https://freelance-bidding-platform.vercel.app",
   "http://localhost:5173",
   "http://localhost:5174",
   "http://localhost:3000"
