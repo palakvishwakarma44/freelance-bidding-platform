@@ -27,8 +27,8 @@ import dashboardRoutes from './routes/dashboard.routes.js';
 import reviewRoutes from './routes/reviews.routes.js';
 
 app.use(cors({
-    origin: process.env.CLIENT_URL || ["http://localhost:5173", "http://localhost:5174"],
-    credentials: true
+  origin: [process.env.CLIENT_URL],
+  credentials: true
 }));
 app.use(express.json());
 
