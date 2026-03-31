@@ -76,6 +76,15 @@ io.on('connection', (socket) => {
     });
 });
 
+app.get('/api/health', (req, res) => {
+    res.json({
+        status: 'UP',
+        express: true,
+        mongodb: mongoose.connection.readyState === 1 ? 'CONNECTED' : 'DISCONNECTED',
+        timestamp: new Date().toISOString()
+    });
+});
+
 app.get('/', (req, res) => {
     res.send('Freelance Platform API');
 });
